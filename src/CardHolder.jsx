@@ -12,14 +12,14 @@ export default function CardHolder({ cardCount, thikness }) {
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-end",
-        width: "15em",
-        height: "18em",
+        width: "15rem",
+        height: "18rem",
         backgroundColor: "transparent",
         borderColor: "transparent black black black",
-        borderWidth: "1em",
+        borderWidth: "1rem",
         borderStyle: "solid",
-        borderBottomRightRadius: "1em",
-        borderBottomLeftRadius: "1em"
+        borderBottomRightRadius: "1rem",
+        borderBottomLeftRadius: "1rem"
       }}
     >
       {cards}

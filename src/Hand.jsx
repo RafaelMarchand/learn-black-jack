@@ -18,7 +18,7 @@ export default function Hand({ hand }) {
         </div>
       )}
 
-      <div style={{ position: "relative", height: "23em", width: "15em" }}>
+      <div style={{ position: "relative", height: "23rem", width: "15rem" }}>
         {hand.cards &&
           hand.cards.map((card, index) => {
             let position = index * 17

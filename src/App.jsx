@@ -39,7 +39,7 @@ function App() {
   }
 
   return (
-    <Stack>
+    <Stack justifyContent="space-evenly" spacing={2}>
       <Stack
         direction="row"
         justifyContent="center"
@@ -53,8 +53,30 @@ function App() {
           Reset
         </Button>
       </Stack>
-      <CardHolder cardCount={20} thikness={0.3} />
-
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <CardHolder cardCount={20} thikness={0.3} />
+        <HandDealer hand={state.dealerHand} key={"dealer"} />
+        <CardHolder cardCount={20} thikness={0.3} />
+      </Stack>
+      <Stack
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+        spacing={2}
+      >
+        <Button color="neutral" onClick={function () {}} variant="solid">
+          Split
+        </Button>
+        <Button color="neutral" onClick={function () {}} variant="solid">
+          Hit
+        </Button>
+        <Button color="neutral" onClick={function () {}} variant="solid">
+          Double
+        </Button>
+        <Button color="neutral" onClick={function () {}} variant="solid">
+          Stand
+        </Button>
+      </Stack>
       <div
         style={{
           display: "flex",
@@ -73,7 +95,7 @@ function App() {
               onChange={(e) => handleBetInput(e.target.value)}
             />
           </div>
-          {<HandDealer hand={state.dealerHand} key={"dealer"} />}
+
           <div>
             <button onClick={() => executeAction(ACTION.split)}>Split</button>
             <button onClick={() => executeAction(ACTION.hit)}>Hit</button>
