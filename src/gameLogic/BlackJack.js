@@ -128,13 +128,12 @@ export default class BlackJack {
     }, 1000)
   }
 
-  reset(dispatch) {
+  reset() {
     this.state = STATES.start
     this.cards = Array.from(DEK)
     this.cardsDealt = []
     this.dealerHand = new Hand(0, [], false)
     this.player.clear()
-    dispatch()
   }
 
   clearTable() {
@@ -184,7 +183,6 @@ export default class BlackJack {
       if (bestAction === "DS" && !handPlayer.doubleAllowed())
         return ACTION.stand
     }
-    console.log()
     const bestAction = hard_totals[`${handPlayer.value()}`][column]
     if (bestAction === "S") return ACTION.stand
     if (bestAction === "H") return ACTION.hit

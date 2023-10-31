@@ -4,7 +4,15 @@ import HandDealer from "./HandDealer"
 import BlackJack, { ACTION } from "./gameLogic/BlackJack"
 import Hand from "./gameLogic/Hand"
 import BasicStrategy from "./BasicStrategy"
-import { Stack, Button } from "@mui/joy"
+import {
+  Stack,
+  Button,
+  Input,
+  Chip,
+  Card,
+  CardContent,
+  Typography
+} from "@mui/joy"
 import CardHolder from "./CardHolder"
 
 const TYPES = [2, 3, 4, 5, 6, 7, 8, 9, "ace", "jack", "king", "queen"]
@@ -16,22 +24,31 @@ const DEFAULT_STATE = {
   balance: 0
 }
 
-function createReducer(blackJack) {
-  return function reducer() {
-    return blackJack.getState()
-  }
-}
-
 function App() {
   const [blackJack] = useState(new BlackJack())
   const [state, dispatch] = useReducer(createReducer(blackJack), DEFAULT_STATE)
+  const [bet, setBet] = useState("")
+  const betInput = useRef()
+
+  function createReducer(blackJack) {
+    return function reducer(state, reset = false) {
+      if (reset) {
+        return DEFAULT_STATE
+      }
+      return blackJack.getState()
+    }
+  }
 
   function handleBetInput(input) {
-    if (input === "") {
-      blackJack.bet = 0
-    } else {
-      blackJack.bet = parseInt(input)
-    }
+    const value = input.target.value.replace(/[^0-9]/g, "")
+    setBet(value)
+    if (value === "") return
+    blackJack.bet = parseInt(value)
+  }
+
+  function reset() {
+    blackJack.reset.call(blackJack)
+    dispatch(true)
   }
 
   function executeAction(action) {
@@ -44,76 +61,87 @@ function App() {
         direction="row"
         justifyContent="center"
         alignItems="center"
-        spacing={2}
-      >
-        <Button color="neutral" onClick={function () {}} variant="solid">
-          Deal
-        </Button>
-        <Button color="neutral" onClick={function () {}} variant="solid">
-          Reset
-        </Button>
-      </Stack>
-      <Stack direction="row" justifyContent="space-between" alignItems="center">
+        spacing={4}>
         <CardHolder cardCount={20} thikness={0.3} />
-        <HandDealer hand={state.dealerHand} key={"dealer"} />
+        <Stack
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+          spacing={2}>
+          <Button
+            color="neutral"
+            onClick={() => executeAction(ACTION.deal)}
+            variant="solid"
+            fullWidth>
+            Deal
+          </Button>
+          <Button color="neutral" onClick={reset} variant="solid" fullWidth>
+            Reset
+          </Button>
+        </Stack>
+        <HandComponent hand={state.dealerHand} key={"dealer"} />
         <CardHolder cardCount={20} thikness={0.3} />
       </Stack>
       <Stack
         direction="row"
         justifyContent="center"
         alignItems="center"
-        spacing={2}
-      >
-        <Button color="neutral" onClick={function () {}} variant="solid">
-          Split
-        </Button>
-        <Button color="neutral" onClick={function () {}} variant="solid">
-          Hit
-        </Button>
-        <Button color="neutral" onClick={function () {}} variant="solid">
-          Double
-        </Button>
-        <Button color="neutral" onClick={function () {}} variant="solid">
-          Stand
-        </Button>
-      </Stack>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between"
-        }}
-      >
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <div>
-            <button onClick={() => executeAction(ACTION.deal)}>Deal</button>
-            <button onClick={blackJack.reset.bind(blackJack, dispatch)}>
-              Reset
-            </button>
-            <input
-              type="number"
-              onChange={(e) => handleBetInput(e.target.value)}
-            />
-          </div>
+        spacing={4}>
+        <Stack
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+          spacing={2}>
+          <Card sx={{ boxSizing: "border-box", width: "100%" }} variant="soft">
+            <CardContent>
+              <Typography level="title-md">Balance: {state.balance}</Typography>
+            </CardContent>
+          </Card>
+          <Input
+            color="neutral"
+            variant="outlined"
+            startDecorator="Bet: "
+            onChange={(event) => handleBetInput(event)}
+            value={bet}
+            ref={betInput}
+            fullWidth
+          />
+        </Stack>
 
-          <div>
-            <button onClick={() => executeAction(ACTION.split)}>Split</button>
-            <button onClick={() => executeAction(ACTION.hit)}>Hit</button>
-            <button onClick={() => executeAction(ACTION.double)}>Double</button>
-            <button onClick={() => executeAction(ACTION.stand)}>Stand</button>
-            <div
-              style={{ display: "inline-block" }}
-            >{`Balance: ${state.balance}`}</div>
-          </div>
-          <div style={{ display: "flex", flexDirection: "row" }}>
-            {state.playerHands.map((hand, index) => (
-              <HandComponent hand={hand} key={index} />
-            ))}
-          </div>
-        </div>
-        <div>{`Best Action: ${blackJack.bestAction}`}</div>
-        <BasicStrategy table={"hard_totals"} />
-      </div>
+        <Stack justifyContent="center" alignItems="center" spacing={2}>
+          <Button
+            color="neutral"
+            onClick={() => executeAction(ACTION.split)}
+            variant="solid"
+            fullWidth>
+            Split
+          </Button>
+          <Button
+            color="neutral"
+            onClick={() => executeAction(ACTION.hit)}
+            variant="solid"
+            fullWidth>
+            Hit
+          </Button>
+          <Button
+            color="neutral"
+            onClick={() => executeAction(ACTION.double)}
+            variant="solid"
+            fullWidth>
+            Double
+          </Button>
+          <Button
+            color="neutral"
+            onClick={() => executeAction(ACTION.stand)}
+            variant="solid"
+            fullWidth>
+            Stand
+          </Button>
+        </Stack>
+        {state.playerHands.map((hand, index) => (
+          <HandComponent hand={hand} key={index} />
+        ))}
+      </Stack>
     </Stack>
   )
 }
