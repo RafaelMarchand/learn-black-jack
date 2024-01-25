@@ -85,6 +85,8 @@ export default class BlackJack {
     this.state = STATES.start
     this.doubleAfterSplit = true
     this.bestAction = ACTION.none
+
+    console.log("constructor")
   }
 
   action(action, dispatch) {
@@ -178,10 +180,8 @@ export default class BlackJack {
       if (bestAction === "H") return ACTION.hit
       if (bestAction === "D" && handPlayer.doubleAllowed()) return ACTION.double
       if (bestAction === "D" && !handPlayer.doubleAllowed()) return ACTION.hit
-      if (bestAction === "DS" && handPlayer.doubleAllowed())
-        return ACTION.double
-      if (bestAction === "DS" && !handPlayer.doubleAllowed())
-        return ACTION.stand
+      if (bestAction === "DS" && handPlayer.doubleAllowed()) return ACTION.double
+      if (bestAction === "DS" && !handPlayer.doubleAllowed()) return ACTION.stand
     }
     const bestAction = hard_totals[`${handPlayer.value()}`][column]
     if (bestAction === "S") return ACTION.stand

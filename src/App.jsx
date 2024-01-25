@@ -4,15 +4,7 @@ import HandDealer from "./HandDealer"
 import BlackJack, { ACTION } from "./gameLogic/BlackJack"
 import Hand from "./gameLogic/Hand"
 import BasicStrategy from "./BasicStrategy"
-import {
-  Stack,
-  Button,
-  Input,
-  Chip,
-  Card,
-  CardContent,
-  Typography
-} from "@mui/joy"
+import { Stack, Button, Input, Chip, Card, CardContent, Typography } from "@mui/joy"
 import CardHolder from "./CardHolder"
 
 const TYPES = [2, 3, 4, 5, 6, 7, 8, 9, "ace", "jack", "king", "queen"]
@@ -24,8 +16,12 @@ const DEFAULT_STATE = {
   balance: 0
 }
 
+function creatBlackJack() {
+  return new BlackJack()
+}
+
 function App() {
-  const [blackJack] = useState(new BlackJack())
+  const [blackJack] = useState(creatBlackJack)
   const [state, dispatch] = useReducer(createReducer(blackJack), DEFAULT_STATE)
   const [bet, setBet] = useState("")
   const betInput = useRef()
@@ -57,17 +53,9 @@ function App() {
 
   return (
     <Stack justifyContent="space-evenly" spacing={2}>
-      <Stack
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-        spacing={4}>
+      <Stack direction="row" justifyContent="center" alignItems="center" spacing={4}>
         <CardHolder cardCount={20} thikness={0.3} />
-        <Stack
-          direction="column"
-          justifyContent="center"
-          alignItems="center"
-          spacing={2}>
+        <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
           <Button
             color="neutral"
             onClick={() => executeAction(ACTION.deal)}
@@ -82,16 +70,8 @@ function App() {
         <HandComponent hand={state.dealerHand} key={"dealer"} />
         <CardHolder cardCount={20} thikness={0.3} />
       </Stack>
-      <Stack
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-        spacing={4}>
-        <Stack
-          direction="column"
-          justifyContent="center"
-          alignItems="center"
-          spacing={2}>
+      <Stack direction="row" justifyContent="center" alignItems="center" spacing={4}>
+        <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
           <Card sx={{ boxSizing: "border-box", width: "100%" }} variant="soft">
             <CardContent>
               <Typography level="title-md">Balance: {state.balance}</Typography>
